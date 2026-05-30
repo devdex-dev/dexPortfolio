@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEX D. — Automation Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0C0B09;
+  --surface:rgba(240,237,230,0.025);
+  --accent:#F0EDE6;
+  --t1:#F0EDE6;
+  --t2:rgba(240,237,230,0.55);
+  --t3:rgba(240,237,230,0.25);
+  --t4:rgba(240,237,230,0.1);
+  --border:rgba(240,237,230,0.07);
+  --border-h:rgba(240,237,230,0.16);
+}
+html,body{background:var(--bg);color:var(--t1);font-family:'IBM Plex Mono',monospace;min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.hd{max-width:1100px;margin:0 auto;padding:80px 48px 56px;position:relative}
+.hd-sup{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-bottom:32px;display:flex;align-items:center;gap:12px}
+.hd-sup::after{content:'';flex:1;height:1px;background:var(--border)}
+.hd-name{font-family:'Cormorant Garamond',serif;font-size:clamp(72px,9vw,108px);font-weight:300;line-height:.88;letter-spacing:-.02em;color:var(--accent);margin-bottom:28px}
+.cursor{display:inline-block;width:3px;height:.72em;background:var(--accent);vertical-align:-.05em;margin-left:6px;animation:blink 1.1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.hd-row{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.hd-role{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--t2)}
+.hd-stat{font-size:10px;letter-spacing:.1em;color:var(--t3)}
+
+/* EXECUTION LINE */
+.exec-line{max-width:1100px;margin:0 auto;padding:0 48px}
+.exec-track{height:1px;background:var(--border);position:relative;overflow:hidden}
+.exec-fill{position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:sweep 3.5s ease-in-out infinite}
+@keyframes sweep{0%{left:-100%}100%{left:100%}}
+
+/* NAV */
+.nav{max-width:1100px;margin:0 auto;padding:0 48px;display:flex;gap:0;border-bottom:1px solid var(--border)}
+.nav-btn{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--t3);background:none;border:none;border-bottom:1px solid transparent;margin-bottom:-1px;padding:20px 20px 19px;cursor:pointer;transition:color .2s,border-color .2s}
+.nav-btn:first-child{padding-left:0}
+.nav-btn:hover{color:var(--t2)}
+.nav-btn.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* PROJECTS */
+.projects{max-width:1100px;margin:0 auto;padding:0 48px 120px}
+
+.card{
+  position:relative;
+  display:grid;
+  grid-template-columns:64px 1fr 120px;
+  gap:0 40px;
+  padding:44px 0;
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+  transition:background .25s;
+  cursor:default;
+}
+.card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--accent);opacity:0;transition:opacity .3s;
+}
+.card:hover::before{opacity:1}
+.card:hover{background:var(--surface)}
+.card.hidden{display:none}
+
+.c-idx{
+  font-family:'Cormorant Garamond',serif;font-size:13px;font-weight:400;
+  color:var(--t4);letter-spacing:.08em;padding-top:3px;
+}
+.c-body{}
+.c-cat{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-bottom:10px}
+.c-title{
+  font-family:'Cormorant Garamond',serif;font-size:clamp(30px,3.2vw,42px);
+  font-weight:300;line-height:1.05;color:var(--accent);margin-bottom:16px;
+  letter-spacing:-.015em;
+}
+.c-title em{font-style:italic;font-weight:300}
+.c-desc{font-size:11.5px;line-height:1.9;color:var(--t2);max-width:540px;margin-bottom:22px}
+.tags{display:flex;flex-wrap:wrap;gap:7px}
+.tag{
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--t3);border:1px solid var(--border);
+  padding:4px 10px;border-radius:1px;
+  transition:border-color .2s,color .2s;
+}
+.card:hover .tag{border-color:var(--border-h);color:var(--t2)}
+
+.c-meta{display:flex;flex-direction:column;align-items:flex-end;gap:10px;padding-top:3px}
+.badge{font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:5px 10px;border-radius:1px}
+.b-stable{color:rgba(240,237,230,.55);border:1px solid rgba(240,237,230,.15)}
+.b-unstable{color:rgba(240,237,230,.28);border:1px dashed rgba(240,237,230,.1)}
+.b-ongoing{color:var(--accent);border:1px solid rgba(240,237,230,.4);animation:pulse-b 2s ease-in-out infinite}
+.b-active{color:var(--accent);border:1px solid var(--accent);animation:pulse-b 2s ease-in-out infinite}
+@keyframes pulse-b{0%,100%{opacity:1}50%{opacity:.65}}
+
+.b-ver{font-size:9px;color:var(--t4);letter-spacing:.08em}
+
+/* Ghost number */
+.ghost{
+  position:absolute;right:-8px;bottom:-24px;
+  font-family:'Cormorant Garamond',serif;font-size:160px;font-weight:400;
+  color:rgba(240,237,230,.018);line-height:1;
+  pointer-events:none;user-select:none;
+  transition:color .3s;
+}
+.card:hover .ghost{color:rgba(240,237,230,.035)}
+
+/* Stagger in */
+.card{animation:up .5s ease both}
+.card:nth-child(1){animation-delay:.04s}
+.card:nth-child(2){animation-delay:.09s}
+.card:nth-child(3){animation-delay:.14s}
+.card:nth-child(4){animation-delay:.19s}
+.card:nth-child(5){animation-delay:.24s}
+.card:nth-child(6){animation-delay:.29s}
+.card:nth-child(7){animation-delay:.34s}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* SIDE QUESTS SECTION */
+.sq-section{max-width:1100px;margin:0 auto;padding:0 48px 80px}
+.sq-header{padding:56px 0 40px;border-bottom:1px solid var(--border);margin-bottom:0}
+.sq-sup{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.sq-sup::after{content:'';flex:1;height:1px;background:var(--border)}
+.sq-title{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,5vw,64px);font-weight:300;line-height:.9;letter-spacing:-.02em;color:var(--accent)}
+.sq-title em{font-style:italic}
+.sq-subtitle{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-top:12px}
+
+.sq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:0}
+.sq-item{background:var(--bg);padding:44px;position:relative;overflow:hidden;transition:background .25s;cursor:default}
+.sq-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);opacity:0;transition:opacity .3s}
+.sq-item:hover::before{opacity:1}
+.sq-item:hover{background:var(--surface)}
+.sq-item.wide{grid-column:1/-1}
+
+.sq-i-sup{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--t3);margin-bottom:14px}
+.sq-i-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,2.8vw,38px);font-weight:300;color:var(--accent);line-height:1.05;margin-bottom:16px;letter-spacing:-.01em}
+.sq-i-title em{font-style:italic}
+.sq-i-desc{font-size:11px;line-height:1.9;color:var(--t2);max-width:480px;margin-bottom:24px}
+
+/* Canva gallery strip */
+.canva-strip{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.canva-frame{
+  position:relative;overflow:hidden;border-radius:2px;
+  border:1px solid var(--border);
+  flex-shrink:0;
+  transition:border-color .3s,transform .3s;
+}
+.canva-frame:hover{border-color:var(--border-h);transform:translateY(-3px)}
+.canva-frame img{display:block;object-fit:cover;filter:brightness(.9) saturate(.85)}
+.canva-frame:hover img{filter:brightness(1) saturate(1)}
+
+/* scatter layout for peace camp */
+.scatter-wrap{position:relative;width:100%;height:340px;margin-top:8px}
+.scatter-wrap .canva-frame{position:absolute}
+.scatter-wrap .f1{width:260px;height:160px;top:0;left:0;transform:rotate(-2.5deg)}
+.scatter-wrap .f2{width:200px;height:130px;top:20px;left:220px;transform:rotate(1.8deg)}
+.scatter-wrap .f3{width:170px;height:155px;top:10px;left:390px;transform:rotate(-1deg)}
+.scatter-wrap .f4{width:215px;height:145px;top:165px;left:30px;transform:rotate(1.2deg)}
+.scatter-wrap .f5{width:180px;height:130px;top:180px;left:255px;transform:rotate(-2deg)}
+.scatter-wrap .f6{width:155px;height:145px;top:155px;left:430px;transform:rotate(1.5deg)}
+
+.sq-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:auto}
+.sq-tag{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);border:1px solid var(--border);padding:4px 10px;border-radius:1px;transition:border-color .2s,color .2s}
+.sq-item:hover .sq-tag{border-color:var(--border-h);color:var(--t2)}
+
+.sq-idx{font-family:'Cormorant Garamond',serif;font-size:11px;color:var(--t4);letter-spacing:.08em;margin-bottom:8px}
+
+/* ghost */
+.sq-ghost{position:absolute;right:-8px;bottom:-24px;font-family:'Cormorant Garamond',serif;font-size:140px;font-weight:400;color:rgba(240,237,230,.018);line-height:1;pointer-events:none;user-select:none;transition:color .3s}
+.sq-item:hover .sq-ghost{color:rgba(240,237,230,.035)}
+
+/* Divider between main and side quests */
+.section-divider{max-width:1100px;margin:0 auto;padding:0 48px}
+.section-divider-inner{height:1px;background:var(--border);position:relative;display:flex;align-items:center;justify-content:center}
+.section-divider-label{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--t4);background:var(--bg);padding:0 20px;position:relative}
+
+@media(max-width:700px){
+  .sq-section{padding-left:24px;padding-right:24px}
+  .sq-grid{grid-template-columns:1fr}
+  .sq-item.wide{grid-column:1}
+  .scatter-wrap{height:auto;display:flex;flex-wrap:wrap;gap:8px;position:static}
+  .scatter-wrap .canva-frame{position:static;transform:none!important;width:calc(50% - 4px)!important;height:120px!important}
+  .section-divider{padding-left:24px;padding-right:24px}
+}
+
+/* FOOTER */
+.ft{max-width:1100px;margin:0 auto;padding:36px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.ft-txt{font-size:10px;letter-spacing:.1em;color:var(--t4)}
+.ft-avail{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--t2);display:flex;align-items:center;gap:8px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;animation:pulse-b 2s ease-in-out infinite}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  .hd,.exec-line,.nav,.projects,.ft{padding-left:24px;padding-right:24px}
+  .card{grid-template-columns:40px 1fr;grid-template-rows:auto auto}
+  .c-meta{flex-direction:row;grid-column:2;align-items:center;justify-content:flex-start;padding-top:0}
+  .ghost{font-size:100px}
+}
+</style>
+</head>
+<body>
+
+<header class="hd">
+  <p class="hd-sup">n8n automation engineer · workflow architect · davao, ph</p>
+  <h1 class="hd-name">DEX D.<span class="cursor"></span></h1>
+  <div class="hd-row">
+    <p class="hd-role">Building workflows that work while you sleep</p>
+    <!-- <p class="hd-stat">7 workflows · 4 categories · 1 engineer</p> -->
+  </div>
+</header>
+
+<div class="exec-line"><div class="exec-track"><div class="exec-fill"></div></div></div>
+
+<nav class="nav">
+  <button class="nav-btn on" data-filter="all">All</button>
+  <button class="nav-btn" data-filter="ai">AI Agent</button>
+  <button class="nav-btn" data-filter="data">Data Ops</button>
+  <button class="nav-btn" data-filter="lead">Lead Gen</button>
+  <!-- <button class="nav-btn" data-filter="content">Content</button> -->
+  <button class="nav-btn" data-filter="devops">DevOps</button>
+</nav>
+
+<main class="projects">
+
+  <article class="card" data-cat="ai">
+    <div class="c-idx">01</div>
+    <div class="c-body">
+      <p class="c-cat">AI Agent</p>
+      <h2 class="c-title">AI Appointment<br><em>Setter</em></h2>
+      <p class="c-desc">Conversational scheduling agent operating over Telegram. Collects client details, checks Google Calendar for availability within business hours, handles slot conflicts by proposing the next opening, and books confirmed appointments — all in natural language.</p>
+      <div class="tags">
+        <span class="tag">Telegram</span>
+        <span class="tag">GPT-4.1-mini</span>
+        <span class="tag">Google Calendar</span>
+        <span class="tag">n8n Agent</span>
+        <span class="tag">Buffer Memory</span>
+        <span class="tag">Slack</span>
+      </div>
+    </div>
+    <div class="c-meta">
+      <!-- <span class="badge b-unstable">Unstable</span> -->
+    </div>
+    <span class="ghost" aria-hidden="true">01</span>
+  </article>
+
+  <article class="card" data-cat="data">
+    <div class="c-idx">02</div>
+    <div class="c-body">
+      <p class="c-cat">Data Ops</p>
+      <h2 class="c-title">CRM Data Sync<br><em>&amp; Cleanup</em></h2>
+      <p class="c-desc">Automated pipeline that synchronizes CRM records, detects duplicates, normalizes field formats, and flags inconsistencies for review. Runs on a set schedule with structured error reporting built into the flow.</p>
+      <div class="tags">
+        <span class="tag">CRM</span>
+        <span class="tag">Data Cleanup</span>
+        <span class="tag">Deduplication</span>
+        <span class="tag">Scheduled</span>
+        <span class="tag">Error Handling</span>
+      </div>
+    </div>
+    <div class="c-meta">
+      <!-- <span class="badge b-ongoing">On-Going</span> -->
+      <span class="b-ver">v1.1</span>
+    </div>
+    <span class="ghost" aria-hidden="true">02</span>
+  </article>
+
+  <article class="card" data-cat="lead">
+    <div class="c-idx">03</div>
+    <div class="c-body">
+      <p class="c-cat">Lead Gen · AI-Powered</p>
+      <h2 class="c-title">Lead Capture<br><em>AI-Powered</em></h2>
+      <p class="c-desc">Webhook-triggered intake that routes form submissions through an AI agent for qualification, enrichment, and structured storage into Google Sheets. Includes conditional branching for lead scoring and follow-up routing.</p>
+      <div class="tags">
+        <span class="tag">Webhook</span>
+        <span class="tag">OpenAI</span>
+        <span class="tag">Google Sheets</span>
+        <span class="tag">AI Agent</span>
+        <span class="tag">Lead Scoring</span>
+      </div>
+    </div>
+    <div class="c-meta">
+      <!-- <span class="badge b-stable">Stable</span> -->
+      <span class="b-ver">v1</span>
+    </div>
+    <span class="ghost" aria-hidden="true">03</span>
+  </article>
+
+  <article class="card" data-cat="lead">
+    <div class="c-idx">04</div>
+    <div class="c-body">
+      <p class="c-cat">Lead Gen · Domain-Specific</p>
+      <h2 class="c-title">Real Estate<br><em>Lead Capture</em></h2>
+      <p class="c-desc">Free-tier compatible lead capture built for real estate. Processes inbound property inquiries via webhook, validates and routes data through conditional branches, and stores qualified leads — no paid AI credits required.</p>
+      <div class="tags">
+        <span class="tag">Real Estate</span>
+        <span class="tag">Webhook</span>
+        <span class="tag">Google Sheets</span>
+        <span class="tag">Free-Tier</span>
+        <span class="tag">No AI Required</span>
+      </div>
+    </div>
+    <div class="c-meta">
+      <!-- <span class="badge b-stable">Stable</span> -->
+      <span class="b-ver">v1.2</span>
+    </div>
+    <span class="ghost" aria-hidden="true">04</span>
+  </article>
+
+  <article class="card" data-cat="ai">
+    <div class="c-idx">05</div>
+    <div class="c-body">
+      <p class="c-cat">AI · Vector Search</p>
+      <h2 class="c-title">Retrieval-Augmented<br><em>Generation</em></h2>
+      <p class="c-desc">End-to-end RAG pipeline triggered by Google Drive file events. New documents are chunked, embedded via OpenAI, and stored in a Supabase vector database — enabling semantic search and context-aware AI responses grounded in private document collections.</p>
+      <div class="tags">
+        <span class="tag">RAG</span>
+        <span class="tag">Google Drive</span>
+        <span class="tag">Supabase</span>
+        <span class="tag">OpenAI Embeddings</span>
+        <span class="tag">Vector DB</span>
+        <span class="tag">Text Splitting</span>
+      </div>
+    </div>
+    <div class="c-meta">
+      <!-- <span class="badge b-stable">Stable</span> -->
+    </div>
+    <span class="ghost" aria-hidden="true">05</span>
+  </article>
+
+  <!-- <article class="card" data-cat="content">
+    <div class="c-idx">06</div>
+    <div class="c-body">
+      <p class="c-cat">Content Automation</p>
+      <h2 class="c-title">Daily Motivational<br><em>Facebook Post</em></h2>
+      <p class="c-desc">Fully automated content pipeline that generates and publishes daily motivational posts to Facebook on a fixed schedule. Handles content generation, formatting, and API posting with wait nodes and conditional error handling.</p>
+      <div class="tags">
+        <span class="tag">Facebook API</span>
+        <span class="tag">Scheduler</span>
+        <span class="tag">HTTP Request</span>
+        <span class="tag">Content Gen</span>
+        <span class="tag">Retry Logic</span>
+      </div>
+    </div>
+    <div class="c-meta">
+      <span class="badge b-stable">Stable</span>
+    </div>
+    <span class="ghost" aria-hidden="true">06</span>
+  </article> -->
+
+  <article class="card" data-cat="devops">
+    <div class="c-idx">06</div>
+    <div class="c-body">
+      <p class="c-cat">DevOps · Infrastructure</p>
+      <h2 class="c-title">Workflow Backup<br><em>&amp; Error Monitor</em></h2>
+      <p class="c-desc">Dual-purpose infrastructure layer. A scheduled job exports all n8n workflows to Google Drive as versioned JSON files. Paired with a global error trigger that catches failures across every workflow and pushes structured Telegram alerts with error context and execution links.</p>
+      <div class="tags">
+        <span class="tag">Google Drive</span>
+        <span class="tag">Error Trigger</span>
+        <span class="tag">Telegram Alerts</span>
+        <span class="tag">Scheduler</span>
+        <span class="tag">Backup</span>
+        <span class="tag">Monitoring</span>
+      </div>
+    </div>
+    <div class="c-meta">
+      <!-- <span class="badge b-active">Active</span> -->
+    </div>
+    <span class="ghost" aria-hidden="true">07</span>
+  </article>
+
+</main>
+
+<div class="section-divider">
+  <div class="section-divider-inner">
+    <span class="section-divider-label">Side Quests</span>
+  </div>
+</div>
+
+<section class="sq-section">
+  <div class="sq-header">
+    <p class="sq-sup">Campaign &amp; Promotional Visuals · Canva</p>
+    <h2 class="sq-title">Side<br><em>Quests.</em></h2>
+    <p class="sq-subtitle">Design work outside the automation stack</p>
+  </div>
+
+  <div class="sq-grid">
+
+    <!-- Peace Camp Full Suite -->
+    <article class="sq-item wide">
+      <div class="sq-idx">SQ·01</div>
+      <p class="sq-i-sup">Campaign Design · Video Editing</p>
+      <h3 class="sq-i-title">Youth Peace Camp<br><em>Campaign Suite</em></h3>
+      <p class="sq-i-desc">Full campaign asset suite for the 6th Youth for Peace Movement Laak Chapter. Designed social media posts, countdown graphics, facilitator call-to-actions, and a 30-second teaser video — all built in Canva. Clear messaging, cohesive olive-and-earth palette, and rally-ready typography throughout.</p>
+    <div style="position: relative; width: 100%; height: 0; padding-top: 83.8298%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https://www.canva.com/design/DAHLG-en7fU/mNwr4lcPq89MjRnnGSHOwg/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>
+<a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAHLG-en7fU&#x2F;mNwr4lcPq89MjRnnGSHOwg&#x2F;view?utm_content=DAHLG-en7fU&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">Design</a> by Dex Decierdo
+      <div class="sq-tags" style="margin-top:28px">
+        <span class="sq-tag">Canva</span>
+        <span class="sq-tag">Social Media</span>
+        <span class="sq-tag">Video Editing</span>
+        <span class="sq-tag">Campaign Design</span>
+        <span class="sq-tag">Countdown Series</span>
+        <span class="sq-tag">Poster Design</span>
+      </div>
+      <span class="sq-ghost" aria-hidden="true">SQ</span>
+    </article>
+
+    <!-- Promo Graphics -->
+    <article class="sq-item">
+      <div class="sq-idx">SQ·02</div>
+      <p class="sq-i-sup">Promotional Visuals · Brand Design</p>
+      <h3 class="sq-i-title">Campaign<br><em>Graphics</em></h3>
+      <p class="sq-i-desc">Promotional graphics for organizations and online campaigns. Focused on clear messaging, clean layouts, and brand consistency adapted across Facebook, Instagram, and presentations.</p>
+      <div class="canva-strip" style="margin-bottom:24px">
+        <div style="position: relative; width: 100%; height: 0; padding-top: 141.4286%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https://www.canva.com/design/DAG40nOoWcI/dQPrKOnmuS3wxVSlUki0Lw/view?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>
+<a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAG40nOoWcI&#x2F;dQPrKOnmuS3wxVSlUki0Lw&#x2F;view?utm_content=DAG40nOoWcI&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">Design</a> by Dex Decierdo
+      </div>
+      <div class="sq-tags">
+        <span class="sq-tag">Canva</span>
+        <span class="sq-tag">Poster Design</span>
+        <span class="sq-tag">Social Posts</span>
+        <span class="sq-tag">Brand Visuals</span>
+      </div>
+      <span class="sq-ghost" aria-hidden="true">02</span>
+    </article>
+
+
+
+
+    <!-- Video teaser -->
+    <article class="sq-item">
+      <div class="sq-idx">SQ·03</div>
+      <p class="sq-i-sup">Video Production · Canva</p>
+      <h3 class="sq-i-title">Peace Camp<br><em>Teaser Video</em></h3>
+      <p class="sq-i-desc">30-second teaser cut for the Youth Peace Camp campaign. Edited clips, transitions, and text overlays engineered for an uplifting narrative — inspiring youth participation and community awareness.</p>
+      <div class="canva-strip" style="margin-bottom:24px">
+        <div class="canva-frame" style="position:relative">
+         <div style="position: relative; width: 100%; height: 0; padding-top: 100.0000%;
+ padding-bottom: 0; box-shadow: 0 2px 8px 0 rgba(63,69,81,0.16); margin-top: 1.6em; margin-bottom: 0.9em; overflow: hidden;
+ border-radius: 8px; will-change: transform;">
+  <iframe loading="lazy" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: none; padding: 0;margin: 0;"
+    src="https://www.canva.com/design/DAFHYR1GWVI/uHVhzef6bUpPPN8Zm_zz1Q/watch?embed" allowfullscreen="allowfullscreen" allow="fullscreen">
+  </iframe>
+</div>
+<a href="https:&#x2F;&#x2F;www.canva.com&#x2F;design&#x2F;DAFHYR1GWVI&#x2F;uHVhzef6bUpPPN8Zm_zz1Q&#x2F;watch?utm_content=DAFHYR1GWVI&amp;utm_campaign=designshare&amp;utm_medium=embeds&amp;utm_source=link" target="_blank" rel="noopener">Peace Camp Teaser</a> by Dex Decierdo
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(240,237,230,.12);border:1px solid rgba(240,237,230,.3);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
+              <svg width="14" height="16" viewBox="0 0 14 16" fill="none"><path d="M2 1.5L12.5 8L2 14.5V1.5Z" fill="rgba(240,237,230,0.7)"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sq-tags">
+        <span class="sq-tag">Video Editing</span>
+        <span class="sq-tag">Canva</span>
+
+      </div>
+      <span class="sq-ghost" aria-hidden="true">03</span>
+    </article>
+
+  </div>
+</section>
+
+<footer class="ft">
+  <span class="ft-txt">DEX D. · dexdecierdo@gmail.com · 2026</span>
+  <!-- <span class="ft-avail"><span class="dot"></span>Available for freelance work</span> -->
+</footer>
+
+<script>
+const btns = document.querySelectorAll('.nav-btn');
+const cards = document.querySelectorAll('.card');
+const map = {ai:['ai'],data:['data'],lead:['lead'],content:['content'],devops:['devops']};
+
+btns.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    btns.forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    const f = btn.dataset.filter;
+    cards.forEach(c=>{
+      if(f==='all'||map[f]?.includes(c.dataset.cat)){
+        c.classList.remove('hidden');
+      } else {
+        c.classList.add('hidden');
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
