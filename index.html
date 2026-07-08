@@ -118,6 +118,7 @@ html,body{background:var(--bg);color:var(--t1);font-family:'IBM Plex Mono',monos
 .card:nth-child(5){animation-delay:.24s}
 .card:nth-child(6){animation-delay:.29s}
 .card:nth-child(7){animation-delay:.34s}
+.card:nth-child(8){animation-delay:.39s}
 @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
 /* SIDE QUESTS SECTION */
@@ -250,15 +251,16 @@ html,body{background:var(--bg);color:var(--t1);font-family:'IBM Plex Mono',monos
   <article class="card" data-cat="data">
     <div class="c-idx">02</div>
     <div class="c-body">
-      <p class="c-cat">Data Ops</p>
-      <h2 class="c-title">CRM Data Sync<br><em>&amp; Cleanup</em></h2>
-      <p class="c-desc">Automated pipeline that synchronizes CRM records, detects duplicates, normalizes field formats, and flags inconsistencies for review. Runs on a set schedule with structured error reporting built into the flow.</p>
+      <p class="c-cat">Data Ops · Data Hygiene</p>
+      <h2 class="c-title">CRM Email Validator<br><em>&amp; Bounce Cleanup</em></h2>
+      <p class="c-desc">Nightly data-hygiene pass over a CRM lead sheet. Validates email syntax, sends a live test message to confirm real-world deliverability, and detects hard bounces from the reply thread — sorting every lead into confirmed-valid, invalid-format, or bounced buckets, with every action written to an audit log.</p>
       <div class="tags">
         <span class="tag">CRM</span>
-        <span class="tag">Data Cleanup</span>
-        <span class="tag">Deduplication</span>
+        <span class="tag">Google Sheets</span>
+        <span class="tag">Gmail</span>
+        <span class="tag">Bounce Detection</span>
+        <span class="tag">Audit Log</span>
         <span class="tag">Scheduled</span>
-        <span class="tag">Error Handling</span>
       </div>
     </div>
     <div class="c-meta">
@@ -272,14 +274,14 @@ html,body{background:var(--bg);color:var(--t1);font-family:'IBM Plex Mono',monos
     <div class="c-idx">03</div>
     <div class="c-body">
       <p class="c-cat">Lead Gen · AI-Powered</p>
-      <h2 class="c-title">Lead Capture<br><em>AI-Powered</em></h2>
-      <p class="c-desc">Webhook-triggered intake that routes form submissions through an AI agent for qualification, enrichment, and structured storage into Google Sheets. Includes conditional branching for lead scoring and follow-up routing.</p>
+      <h2 class="c-title">AI CRM Lead<br><em>Qualification</em></h2>
+      <p class="c-desc">Webhook-triggered lead qualification template. An autonomous AI agent classifies each submission's intent, quality, and pipeline stage, checks for duplicate CRM records, writes qualified leads to Google Sheets, and posts a Slack alert to the sales team — filtering out spam before it ever reaches the sheet.</p>
       <div class="tags">
         <span class="tag">Webhook</span>
-        <span class="tag">OpenAI</span>
+        <span class="tag">Google Gemini</span>
         <span class="tag">Google Sheets</span>
         <span class="tag">AI Agent</span>
-        <span class="tag">Lead Scoring</span>
+        <span class="tag">Slack</span>
       </div>
     </div>
     <div class="c-meta">
@@ -293,14 +295,15 @@ html,body{background:var(--bg);color:var(--t1);font-family:'IBM Plex Mono',monos
     <div class="c-idx">04</div>
     <div class="c-body">
       <p class="c-cat">Lead Gen · Domain-Specific</p>
-      <h2 class="c-title">Real Estate<br><em>Lead Capture</em></h2>
-      <p class="c-desc">Free-tier compatible lead capture built for real estate. Processes inbound property inquiries via webhook, validates and routes data through conditional branches, and stores qualified leads — no paid AI credits required.</p>
+      <h2 class="c-title">Real Estate Lead<br><em>Scoring &amp; Qualification</em></h2>
+      <p class="c-desc">AI-powered lead intake built for a Philippine real estate agency. A webhook submission is cleaned and normalized by an AI agent, tagged into PHP budget bands, scored 0–100, and assigned a priority and follow-up urgency — then routed to Google Sheets and a Slack channel, with leads missing contact details diverted to a separate review queue.</p>
       <div class="tags">
         <span class="tag">Real Estate</span>
         <span class="tag">Webhook</span>
+        <span class="tag">Mistral Codestral</span>
         <span class="tag">Google Sheets</span>
-        <span class="tag">Free-Tier</span>
-        <span class="tag">No AI Required</span>
+        <span class="tag">Slack</span>
+        <span class="tag">Lead Scoring</span>
       </div>
     </div>
     <div class="c-meta">
@@ -351,8 +354,44 @@ html,body{background:var(--bg);color:var(--t1);font-family:'IBM Plex Mono',monos
     <span class="ghost" aria-hidden="true">06</span>
   </article> -->
 
-  <article class="card" data-cat="devops">
+  <article class="card" data-cat="ai">
     <div class="c-idx">06</div>
+    <div class="c-body">
+      <p class="c-cat">AI Agent · Email</p>
+      <h2 class="c-title">AI Gmail<br><em>Auto-Labeler</em></h2>
+      <p class="c-desc">Polls a Gmail inbox every 5 minutes and uses an AI agent to classify each unread message into one of nine existing labels — job alerts, application updates, security notices, and more — applying the label automatically so nothing requiring action gets buried.</p>
+      <div class="tags">
+        <span class="tag">Gmail</span>
+        <span class="tag">Mistral Cloud</span>
+        <span class="tag">AI Agent</span>
+        <span class="tag">Structured Output</span>
+        <span class="tag">Polling</span>
+      </div>
+    </div>
+    <div class="c-meta"></div>
+    <span class="ghost" aria-hidden="true">06</span>
+  </article>
+
+  <article class="card" data-cat="ai">
+    <div class="c-idx">07</div>
+    <div class="c-body">
+      <p class="c-cat">AI Agent · Productivity</p>
+      <h2 class="c-title">AI Job Application<br><em>Tracker</em></h2>
+      <p class="c-desc">Forward a job posting link or description to Telegram or Discord and an AI agent scrapes the page, extracts the company, title, salary, and a condensed summary, and logs it as a new row in a Google Sheets tracker — with a confirmation reply sent back on whichever platform it came from.</p>
+      <div class="tags">
+        <span class="tag">Telegram</span>
+        <span class="tag">Discord</span>
+        <span class="tag">Google Gemini</span>
+        <span class="tag">Google Sheets</span>
+        <span class="tag">Web Scraping</span>
+      </div>
+    </div>
+    <div class="c-meta"></div>
+    <span class="ghost" aria-hidden="true">07</span>
+  </article>
+
+  <article class="card" data-cat="devops">
+    <div class="c-idx">08</div>
     <div class="c-body">
       <p class="c-cat">DevOps · Infrastructure</p>
       <h2 class="c-title">Workflow Backup<br><em>&amp; Error Monitor</em></h2>
@@ -369,7 +408,7 @@ html,body{background:var(--bg);color:var(--t1);font-family:'IBM Plex Mono',monos
     <div class="c-meta">
       <!-- <span class="badge b-active">Active</span> -->
     </div>
-    <span class="ghost" aria-hidden="true">07</span>
+    <span class="ghost" aria-hidden="true">08</span>
   </article>
 
 </main>
